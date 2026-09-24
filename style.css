@@ -1,0 +1,96 @@
+/* PHASE 2: style. Design tokens first, so colours live in one place. */
+:root {
+  --bg: #eef0f6;
+  --surface: #ffffff;
+  --ink: #1b1f3b;
+  --muted: #6b7091;
+  --line: #d9dcea;
+  --accent: #3d4bff;
+  --heart: #ff4d73;
+  --radius: 14px;
+  --font-head: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding-bottom: 150px; /* room for the tray */
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.5 var(--font-body);
+}
+h1, h2 { font-family: var(--font-head); margin: 0; letter-spacing: -0.02em; }
+h1 { font-size: clamp(2.4rem, 8vw, 4.5rem); font-weight: 800; line-height: 1; }
+h2 { font-size: 1.5rem; margin-bottom: 12px; }
+.muted { color: var(--muted); margin: 8px 0 0; }
+.top { padding: 32px 20px 8px; max-width: 1100px; margin: 0 auto; }
+main { max-width: 1100px; margin: 0 auto; padding: 12px 20px; display: grid; gap: 24px; }
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Form panel */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
+.panel summary { cursor: pointer; font-weight: 600; }
+#add-form { display: grid; gap: 12px; margin-top: 14px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); align-items: end; }
+label { display: grid; gap: 4px; font-size: 0.9rem; color: var(--muted); }
+input, select { font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+input[type="color"] { padding: 2px; height: 42px; }
+
+/* Buttons + chips */
+.btn, .chip {
+  font: inherit; cursor: pointer; padding: 10px 16px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.btn.primary, .chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.toolbar input[type="search"] { flex: 1 1 200px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Grid of clothes: auto-fill makes it responsive without media queries */
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+.item.picked { outline: 3px solid var(--accent); }
+.thumb { aspect-ratio: 4 / 5; display: grid; place-items: center; font-size: 4rem; position: relative; overflow: hidden; }
+/* IMAGE SLOT: the photo sits on top of the colour + emoji placeholder */
+.thumb img, .mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Shown while the photo file is missing: dashed outline + the path it expects */
+.thumb.no-img { outline: 2px dashed var(--accent); outline-offset: -8px; }
+.thumb.no-img::after { content: attr(data-slot); position: absolute; left: 14px; right: 14px; bottom: 16px; font-size: .7rem; line-height: 1.3; text-align: center; background: #fff; color: var(--accent); padding: 3px 6px; border-radius: 6px; word-break: break-all; }
+.item h3 { margin: 0; font-size: 1rem; }
+.item .meta { padding: 12px 14px 4px; }
+.item .meta span { color: var(--muted); font-size: 0.85rem; }
+.actions { display: flex; gap: 6px; padding: 8px 14px 14px; margin-top: auto; }
+.actions button { font: inherit; font-size: 0.85rem; cursor: pointer; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+.actions .add { flex: 1; }
+.heart { position: absolute; top: 8px; right: 8px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); font-size: 1.2rem; cursor: pointer; color: var(--muted); }
+.heart[aria-pressed="true"] { color: var(--heart); }
+.empty { grid-column: 1 / -1; padding: 40px 0; text-align: center; color: var(--muted); }
+
+/* Saved outfits */
+.saved { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.outfit { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+.outfit .row { display: flex; gap: 6px; margin: 8px 0; }
+.mini { width: 48px; height: 60px; border-radius: 8px; display: grid; place-items: center; font-size: 1.5rem; position: relative; overflow: hidden; }
+
+/* Outfit tray, fixed to the bottom */
+.tray { position: fixed; left: 0; right: 0; bottom: 0; background: var(--ink); color: #fff; padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.tray-items { display: flex; gap: 8px; min-height: 60px; align-items: center; flex-wrap: wrap; }
+.tray-items .hint { color: #b9bdd8; }
+.tray .mini { cursor: pointer; }
+.tray-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.tray-actions input { width: 180px; }
+.tray .btn.primary { background: var(--accent); border-color: var(--accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .item, .chip, .btn { transition: transform .15s; }
+  .item:hover { transform: translateY(-3px); }
+}
+
+/* Vibe tags: each vibe has its own colour AND its text label */
+.vibes { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.vibe { font-size: .75rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; }
+.vibe.casual { background: #e1eeff; color: #1f4f9a; }
+.vibe.church { background: #eee5ff; color: #5b34b0; }
+.vibe.outing { background: #ffe7d9; color: #a04416; }
+.vibe-pick { display: flex; flex-wrap: wrap; gap: 6px 14px; border: 0; padding: 0; margin: 0; }
+.vibe-pick legend { font-size: .9rem; color: var(--muted); padding: 0; margin-bottom: 6px; }
+.vibe-pick label { display: flex; align-items: center; gap: 6px; color: var(--ink); font-size: 1rem; }
+.vibe-pick input { width: 18px; height: 18px; padding: 0; }

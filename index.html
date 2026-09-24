@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Wardrobe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- PHASE 1: structure -->
+  <header class="top">
+    <h1>My Wardrobe</h1>
+    <p id="count" class="muted"></p>
+  </header>
+
+  <main>
+    <!-- Add item form -->
+    <details class="panel" id="add-panel">
+      <summary>Add an item</summary>
+      <form id="add-form">
+        <label>Name <input id="f-name" required maxlength="40" placeholder="Denim jacket"></label>
+        <label>Category
+          <select id="f-cat">
+            <option>Tops</option><option>Bottoms</option><option>Dresses</option>
+            <option>Corporate</option><option>Shoes</option><option>Accessories</option>
+          </select>
+        </label>
+        <fieldset class="vibe-pick">
+          <legend>Vibe (pick at least one)</legend>
+          <label><input type="checkbox" name="vibe" value="Casual" checked> Casual</label>
+          <label><input type="checkbox" name="vibe" value="Church"> Church</label>
+          <label><input type="checkbox" name="vibe" value="Outing"> Outing</label>
+        </fieldset>
+        <label>Colour <input id="f-color" type="color" value="#7f8cff"></label>
+        <label>Photo (optional) <input id="f-img" type="file" accept="image/*"></label>
+        <button class="btn primary" type="submit">Add to wardrobe</button>
+      </form>
+    </details>
+
+    <!-- Search + filters -->
+    <section class="toolbar" aria-label="Filter wardrobe">
+      <input id="search" type="search" placeholder="Search by name" aria-label="Search by name">
+      <div id="cats" class="chips" role="group" aria-label="Categories"></div>
+      <div id="vibe-chips" class="chips" role="group" aria-label="Vibe"></div>
+      <button id="fav-toggle" class="chip" aria-pressed="false">♥ Favourites only</button>
+    </section>
+
+    <!-- Wardrobe grid -->
+    <section id="grid" class="grid" aria-live="polite"></section>
+
+    <!-- Saved outfits -->
+    <section>
+      <h2>Saved outfits</h2>
+      <div id="saved" class="saved"></div>
+    </section>
+  </main>
+
+  <!-- Outfit builder tray -->
+  <aside class="tray" aria-label="Outfit builder">
+    <div id="tray-items" class="tray-items"></div>
+    <div class="tray-actions">
+      <input id="outfit-name" placeholder="Name this outfit" maxlength="40" aria-label="Outfit name">
+      <button id="save-outfit" class="btn primary">Save outfit</button>
+      <button id="clear-outfit" class="btn">Clear</button>
+    </div>
+  </aside>
+
+  <script src="items.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
