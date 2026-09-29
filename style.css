@@ -94,3 +94,154 @@ input[type="color"] { padding: 2px; height: 42px; }
 .vibe-pick legend { font-size: .9rem; color: var(--muted); padding: 0; margin-bottom: 6px; }
 .vibe-pick label { display: flex; align-items: center; gap: 6px; color: var(--ink); font-size: 1rem; }
 .vibe-pick input { width: 18px; height: 18px; padding: 0; }
+/* =========================================================
+   HERO HEADER
+   ========================================================= */
+
+.hero {
+  position: relative;
+  height: 620px;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+}
+
+.hero-slides {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  animation: wardrobeSlide 25s infinite;
+}
+
+.slide-1 {
+  background-image: url("images/tops/top-01.jpeg");
+  animation-delay: 0s;
+}
+
+.slide-2 {
+  background-image: url("images/dresses/dress-01.jpeg");
+  animation-delay: 5s;
+}
+
+.slide-3 {
+  background-image: url("images/bottoms/bottom-01.jpeg");
+  animation-delay: 10s;
+}
+
+.slide-4 {
+  background-image: url("images/shoes/shoe-01.jpeg");
+  animation-delay: 15s;
+}
+
+.slide-5 {
+  background-image: url("images/accessories/acc-01.jpeg");
+  animation-delay: 20s;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 18, 35, 0.82),
+    rgba(15, 18, 35, 0.45),
+    rgba(15, 18, 35, 0.2)
+  );
+}
+
+.hero-content {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.hero-small {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-family: var(--font-head);
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  line-height: 0.9;
+  margin: 0 0 24px;
+  max-width: 700px;
+}
+
+.hero-text {
+  max-width: 500px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 13px 22px;
+  border-radius: 999px;
+  background: white;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero-button:hover {
+  transform: translateY(-2px);
+}
+
+.wardrobe-count {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+@keyframes wardrobeSlide {
+  0% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  28% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    height: 520px;
+  }
+
+  .hero-content {
+    padding: 30px 20px;
+  }
+
+  .hero-text {
+    font-size: 1rem;
+  }
+}
