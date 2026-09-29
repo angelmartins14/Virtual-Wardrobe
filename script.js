@@ -1,6 +1,6 @@
 // PHASE 3: JavaScript. State -> render() -> events.
 const CATEGORIES = ["All", "Tops", "Bottoms", "Dresses", "Corporate", "Shoes", "Accessories"];
-const VIBES = ["Casual", "Church", "Outing"]; // add a new vibe here + a colour in style.css
+const VIBES = ["Casual", "Church", "Outing", "Corporate"]; // add a new vibe here + a colour in style.css
 const EMOJI = { Tops: "👚", Bottoms: "👖", Dresses: "👗", Corporate: "💼", Shoes: "👟", Accessories: "👜" };
 
 // ---- State (the single source of truth) ----
@@ -10,12 +10,35 @@ let user = { custom: [], favs: {}, hidden: [], outfits: [] };
 let state = { items: [], category: "All", vibe: "All", query: "", favOnly: false, picked: [] };
 
 // localStorage keeps data after refresh. It can fail (private mode, full), so try/catch.
-function load() {
+async function load() {
   try {
     const saved = JSON.parse(localStorage.getItem("wardrobe-v2"));
-    if (saved) user = { ...user, ...saved };
-  } catch (e) { console.warn("Could not load", e); }
+
+    if (saved) {
+      user = { ...user, ...saved };
+    }
+  } catch (e) {
+    console.warn("Could not load local data", e);
+  }
+
   buildItems();
+
+  // Load saved outfits from Supabase
+  const { data, error } = await db
+    .from("outfits")
+    .select("id, name, items, created_at")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Could not load saved outfits:", error);
+    return;
+  }
+
+  user.outfits = data.map((outfit) => ({
+    id: outfit.id,
+    name: outfit.name,
+    items: outfit.items
+  }));
 }
 function save() {
   try { localStorage.setItem("wardrobe-v2", JSON.stringify(user)); }
@@ -163,11 +186,44 @@ $("tray-items").addEventListener("click", (e) => {
 
 $("clear-outfit").addEventListener("click", () => { state.picked = []; render(); });
 
-$("save-outfit").addEventListener("click", () => {
-  if (state.picked.length < 2) return alert("Pick at least two pieces for an outfit.");
-  const name = $("outfit-name").value.trim() || `Outfit ${user.outfits.length + 1}`;
-  user.outfits.push({ id: Date.now(), name, items: [...state.picked] });
-  state.picked = []; $("outfit-name").value = ""; save(); render();
+$("save-outfit").addEventListener("click", async () => {
+  if (state.picked.length < 2) {
+    return alert("Pick at least two pieces for an outfit.");
+  }
+
+  const name =
+    $("outfit-name").value.trim() ||
+    `Outfit ${user.outfits.length + 1}`;
+
+  const outfitItems = [...state.picked];
+
+  // Save outfit to Supabase
+  const { data, error } = await db
+    .from("outfits")
+    .insert({
+      name: name,
+      items: outfitItems
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Could not save outfit:", error);
+    alert("Could not save the outfit. Please try again.");
+    return;
+  }
+
+  // Add the saved outfit to the page
+  user.outfits.push({
+    id: data.id,
+    name: data.name,
+    items: data.items
+  });
+
+  state.picked = [];
+  $("outfit-name").value = "";
+
+  render();
 });
 
 $("saved").addEventListener("click", (e) => {
@@ -196,7 +252,7 @@ function shrink(file) {
 $("add-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const vibes = [...document.querySelectorAll('input[name="vibe"]:checked')].map((c) => c.value);
-  if (!vibes.length) return alert("Pick at least one vibe: Casual, Church or Outing.");
+  if (!vibes.length) return alert("Pick at least one vibe.");
   const file = $("f-img").files[0];
   let image = null;
   if (file) { try { image = await shrink(file); } catch { return alert("That image couldn't be read."); } }
@@ -207,5 +263,6 @@ $("add-form").addEventListener("submit", async (e) => {
   e.target.reset(); save(); buildItems(); render();
 });
 
-load();
-render();
+load().then(() => {
+  render();
+});

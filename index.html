@@ -10,10 +10,38 @@
 </head>
 <body>
   <!-- PHASE 1: structure -->
-  <header class="top">
-    <h1>Deborah Wardrobe</h1>
-    <p id="count" class="muted"></p>
+  <body>
+
+  <header class="hero">
+    <div class="hero-slides">
+      <div class="hero-slide slide-1"></div>
+      <div class="hero-slide slide-2"></div>
+      <div class="hero-slide slide-3"></div>
+      <div class="hero-slide slide-4"></div>
+      <div class="hero-slide slide-5"></div>
+    </div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-small">MY PERSONAL WARDROBE</p>
+
+      <h1>Dress like<br>you mean it.</h1>
+
+      <p class="hero-text">
+        Organize your clothes, create outfits and discover new ways
+        to style what you already own.
+      </p>
+
+      <a href="#grid" class="hero-button">Explore my wardrobe</a>
+    </div>
   </header>
+
+  <div class="wardrobe-count">
+    <p id="count" class="muted"></p>
+  </div>
+
+  <main>
 
   <main>
     <!-- Add item form -->
@@ -67,6 +95,10 @@
     </div>
   </aside>
 
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
   <script src="items.js"></script>
   <script src="script.js"></script>
 </body>
