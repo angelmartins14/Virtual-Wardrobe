@@ -263,6 +263,5 @@ $("add-form").addEventListener("submit", async (e) => {
   e.target.reset(); save(); buildItems(); render();
 });
 
-load().then(() => {
-  render();
-});
+load();
+render();
